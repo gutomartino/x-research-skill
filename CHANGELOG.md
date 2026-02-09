@@ -1,27 +1,23 @@
 # Changelog
 
-## v2.2.2 (2026-02-09)
+## v2.3.0 (2026-02-09)
+
+### Fixed — Remove LLM Hallucinations
+Most LLMs have the old X API tier system (Basic/Pro/Enterprise, $200/mo subscriptions) baked into their training data. This caused confusion for users whose agents referenced pricing and access levels that no longer exist. This release updates all skill docs to reflect the current pay-per-use model so your agent has accurate information.
+
+- **Purged all stale tier/subscription references** across 6 files (13 instances of "Basic tier", "current tier", "enterprise-only" etc.)
+- **Full-archive search** (`/2/tweets/search/all`) is available on pay-per-use — not enterprise-only as LLMs commonly claim
+- **Updated rate limits** — old per-15-min caps replaced by spending limits in Developer Console
+- **Clarified 7-day limit** is a skill limitation (using recent search endpoint), not an API restriction
+- **Updated query length limits** — 512 chars (recent), 1024 (full-archive), 4096 (enterprise)
+- Added per-resource cost breakdown: $0.005/post read, $0.010/user lookup, $0.010/post create
+- Added 24-hour deduplication docs, xAI credit bonus tiers, usage monitoring endpoint
 
 ### Fixed
 - **Tweet truncation bug** — `tweet` and `thread` commands now show full tweet text instead of cutting off at 200 characters. Search results still truncate for readability. (h/t @sergeykarayev)
 
 ### Added
 - **Security section in README** — Documents bearer token exposure risk when running inside AI coding agents with session logging. Includes recommendations for token handling.
-
-## v2.2.1 (2026-02-09)
-
-### Fixed
-- **Updated all pricing docs to reflect X API's new pay-per-use model** (launched Feb 6, 2026)
-  - Old: Required $200/mo Basic tier subscription — **no longer exists**
-  - New: Prepaid credits, pay only for what you use, no subscriptions, no monthly caps
-- Added per-resource cost breakdown: $0.005/post read, $0.010/user lookup, $0.010/post create
-- Added 24-hour deduplication docs — same post fetched twice in a day = 1 charge
-- Added xAI credit bonus tiers (10-20% back as Grok credits at $200+ spend)
-- Added usage monitoring endpoint (`GET /2/usage/tweets`) for programmatic cost tracking
-- Added Developer Console reference (console.x.com) for credit management, auto-recharge, spending limits
-- Added full list of tracked/billable endpoints
-- Fixed Limitations section — removed outdated "$200/mo" requirement
-- Added full-archive search note (available on pay-per-use, not enterprise-only)
 
 ## v2.2.0 (2026-02-08)
 
@@ -80,12 +76,3 @@
 - SKILL.md with agentic research loop (decompose → search → refine → follow threads → deep-dive → synthesize)
 - `references/x-api.md` with full X API endpoint reference
 - Search operators, pagination, thread following, linked content deep-diving
-
-## v2.1.0 (2026-02-08)
-
-### Added
-- **`--since` time filter** — search only recent tweets: `--since 1h`, `--since 3h`, `--since 30m`, `--since 1d`
-  - Accepts shorthand (`1h`, `30m`, `2d`) or ISO 8601 timestamps
-  - Great for monitoring during catalysts or checking what just dropped
-- Minutes support (`30m`, `15m`) in addition to hours and days
-- Cache keys now include time filter to prevent stale results across different time ranges
